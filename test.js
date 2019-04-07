@@ -53,9 +53,7 @@ function mediaQResponse(){
 
 // ============================================
 // ResponsiveSetup()
-// continously call screenResonssive()
-// populate media query array
-// add listener to window size
+// continously call screenResonssive() | populate media query array | add listener to window size
 // ============================================
 function ResponsiveSetup(){
     setInterval(()=>{
@@ -75,125 +73,151 @@ function ResponsiveSetup(){
 
 
 
+// ============================================
+// myRenderer class()
+// constructor set variables render, engine
+// object method
+// ============================================
+class myRenderer {
+    constructor(){
+            Matter.use(
+                'matter-wrap'
+            );
 
-Matter.use(
-    'matter-wrap'
-);
+        // const Render = Matter.Render,
+        const Runner = Matter.Runner,
+        
+        Common = Matter.Common;
+        
+        this.Composite = Matter.Composite,
+        this.Render = Matter.Render;
+        this.MouseConstraint = Matter.MouseConstraint;
+        this. Mouse = Matter.Mouse;
 
-const Engine = Matter.Engine,
-    Render = Matter.Render,
-    Runner = Matter.Runner,
-    Composite = Matter.Composite,
-    Composites = Matter.Composites,
-    Common = Matter.Common,
-    MouseConstraint = Matter.MouseConstraint,
-    Mouse = Matter.Mouse,
-    World = Matter.World,
-    Bodies = Matter.Bodies;
+        this.Engine = Matter.Engine;
+        this.World = Matter.World;
+        this.Composites = Matter.Composites;
+        this.Bodies = Matter.Bodies;
+        this.stack;
 
-// create engine
-const engine = Engine.create(),
-    world = engine.world;
+        // create engine
+        this.engine = this.Engine.create();
+        this.world = this.engine.world; //second world???
 
-// create renderer
-const render = Render.create({
-    element: sectionTag,
-    engine: engine,
-    options: {
-    height: h,
-    width: w,
-    background: "rgba(255, 255, 255, 0)",
-    wireframes: false,
-    pixelRatio: window.devicePixelRatio
-  }
-})
+        this.render = this.Render.create({
+            element: sectionTag,
+            engine: this.engine,
+            options: {
+            height: h,
+            width: w,
+            background: "rgba(255, 255, 255, 0)",
+            wireframes: false,
+            pixelRatio: window.devicePixelRatio
+          }
+        })
 
-Render.run(render);
+        this.Render.run(this.render);
 
-// create runner
-var runner = Runner.create();
-Runner.run(runner, engine);
+        // create runner
+        var runner = Runner.create();
+        Runner.run(runner, this.engine);
 
-// add bodies
-var stack = Composites.stack(-350, -20, 10, 2, 0, 0, function(x, y) {
-    return Bodies.circle(x, y, 5, { 
-                                                        friction: .0021, 
-                                                        restitution: 0.5, 
-                                                        density: 0.001,
-                                                        render: {
-                                                            sprite: {
-                                                            texture: "assets/@.png",
-                                                            // fillStyle: 'white',
-                                                            strokeStyle: 'black',
-                                                            xScale: 1.,
-                                                            yScale: 1.
-                                                            }
-                                                        } 
-                                                        });
-});
+    }
+    
+    objects(){
+            let _bodies = this.Bodies;
+            let _world = this.world;
+            let World = this.World;
 
-World.add(world, stack);
+            console.log(_world)
+            let stack = this.stack
+            // the falling objects are this stack
+            stack = this.Composites.stack(-350, -20, 10, 2, 0, 0, function(x, y) { // this is spacing function (x,y, colomn, row, ?,?)
+                return _bodies.circle(x, y, 5, { 
+                    friction: .0021, 
+                    restitution: 0.5, 
+                    density: 0.001,
+                    render: {
+                        sprite: {
+                        texture: "assets/@.png",
+                        // fillStyle: 'white',
+                        strokeStyle: 'black',
+                        xScale: 1.,
+                        yScale: 1.
+                        }
+                    } 
+                    });
+            });
 
-World.add(world, [
-    Bodies.rectangle(-260, 100, w-500, 100, {
-     isStatic: true, angle: Math.PI * .06,
-     render: {
-        sprite: {
-        texture: "assets/Utility.png",
-        xScale: 0.5,
-        yScale: 0.5
+        World.add(_world, stack);
+
+        World.add(_world, [
+            _bodies.rectangle(-260, 100, w-500, 100, { // first angled body
+             isStatic: true, angle: Math.PI * .06,
+             render: {
+                sprite: {
+                texture: "assets/Utility.png",
+                xScale: 0.5,
+                yScale: 0.5
+                }
+            } 
+            }),
+            _bodies.rectangle(400, 350, 700, 100, { // second angled body
+             isStatic: true, angle: -Math.PI * 0.06,
+             render: {
+                sprite: {
+                texture: "assets/digitalfirst.png",
+                xScale: 0.5,
+                yScale: 0.5
+                }
+            } 
+         }),
+            _bodies.rectangle(0, h-30, w, 100, {  // bottom site rectangle body
+                isStatic: true, 
+                 render: {
+                     fillStyle: 'WHITE',
+                     
+                 }
+            })
+        ]);
+
+        let render = this.render
+        for (var i = 0; i < stack.bodies.length; i += 1) {
+            stack.bodies[i].plugin.wrap = {
+                min: { x: render.bounds.min.x, y: render.bounds.min.y },
+                max: { x: render.bounds.max.x, y: render.bounds.max.y }
+            };
         }
-    } 
-    }),
-    Bodies.rectangle(400, 350, 700, 100, {
-     isStatic: true, angle: -Math.PI * 0.06,
-     render: {
-        sprite: {
-        texture: "assets/digitalfirst.png",
-        xScale: 0.5,
-        yScale: 0.5
-        }
-    } 
- }),
-    Bodies.rectangle(0, h-30, w, 100, { 
-        isStatic: true, 
-         render: {
-             fillStyle: 'WHITE',
-             
-         }
-    })
-]);
+        
+        this.Engine.run(this.engine) // run the engine
+        this.Render.lookAt(this.render, this.Composite.allBodies(this.world)); // fit the render viewport to the scene
+    }
+    
 
-// add mouse control
-var mouse = Mouse.create(render.canvas),
-    mouseConstraint = MouseConstraint.create(engine, {
-        mouse: mouse,
-        constraint: {
-            stiffness: 0.2,
-            render: {
-                visible: false
-            }
-        }
-    });
+      mouseCtrl(){
+        // add mouse control
+        var mouse = this.Mouse.create(this.render.canvas),
+            mouseConstraint = this.MouseConstraint.create(this.engine, {
+                mouse: mouse,
+                constraint: {
+                    stiffness: 0.2,
+                    render: {
+                        visible: false
+                    }
+                }
+            });
 
-World.add(world, mouseConstraint);
+        this.World.add(this.world, mouseConstraint);
 
-// keep the mouse in sync with rendering
-render.mouse = mouse;
+        
+        this.render.mouse = mouse; // keep the mouse in sync with rendering
 
-// fit the render viewport to the scene
-Render.lookAt(render, Composite.allBodies(world));
-
-// wrapping using matter-wrap plugin
-for (var i = 0; i < stack.bodies.length; i += 1) {
-    stack.bodies[i].plugin.wrap = {
-        min: { x: render.bounds.min.x, y: render.bounds.min.y },
-        max: { x: render.bounds.max.x, y: render.bounds.max.y }
-    };
+        
+        // this.Render.lookAt(this.render, this.Composite.allBodies(this.world)); 
+    }
 }
+    
 
-// run both the engine, and the renderer
-Engine.run(engine)
 
 
 
@@ -214,6 +238,9 @@ function loader(){
 // sets up first calls
 // ============================================
 function main(){
+    let rend = new myRenderer()
+    rend.objects()
+    rend.mouseCtrl()
     setTimeout(loader(),100)
     ResponsiveSetup()
 }
