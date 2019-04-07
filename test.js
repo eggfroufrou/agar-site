@@ -2,13 +2,13 @@
 const sectionTag = document.querySelector("section.shapes")
 const w = window.innerWidth
 const h = window.innerHeight
+var mqls = []; // make media query array
 
 
 
 //==============================================================
-// Responsive
-// updates viewport by percetange
-// timer to call 
+//screenResonsive(width, height)
+// updates height and width  variable 
 //==============================================================
 function screenResonsive(width, height) {
     // console.log("responsive ")
@@ -18,43 +18,13 @@ function screenResonsive(width, height) {
     return Math.round(width/100 * window.innerWidth),Math.round(height/100 * window.innerHeight);
 }
 
-setInterval(()=>{
-    screenResonsive(w, h)
-},1000)
 
-
-
-
-//============================================================================================================================
+// ============================================
 // screenState()
-//
-// updates viewport by percetange
-// timer to call 
-//============================================================================================================================
-
-//// list of window.matchMedia() queries
-var mqls = [ 
-    window.matchMedia("(max-width: 860px)"),
-    window.matchMedia("(max-width: 600px)"),
-    window.matchMedia("(max-height: 200px)")
-]
-
-
-
+// add listener to all media queries screen size
+// ============================================
 function screenState(x) {
-     console.log("responsive ")
-   // if (x.matches) { // If media query matches
-   //   document.body.style.backgroundColor = "yellow";
-   // } else {
-   //  document.body.style.backgroundColor = "pink";
-   // }
-
-
-
-    // document.getElementById("content").innerHTML = mqls[0].matches // width: 860px media match?
-    // document.getElementById("content").innerHTML = mqls[1].matches // width: 600px media match?
-    // document.getElementById("content").innerHTML = mqls[2].matches // height: 500px media match?
-
+    console.log("responsive ")
     for (var i=0; i<mqls.length; i++){ // loop through queries
         mediaQResponse(mqls[i]) // call handler function explicitly at run time
         mqls[i].addListener( mediaQResponse) // call handler function whenever the media query is triggered
@@ -63,6 +33,10 @@ function screenState(x) {
  }
 
 
+// ============================================
+// mediaQResponse()
+// respond t0 media query matchs
+// ============================================
 function mediaQResponse(){
     if (mqls[0].matches){ // do something when width: 860px media query matches
         document.body.style.backgroundColor = "#cc99ff"
@@ -76,9 +50,28 @@ function mediaQResponse(){
 
 }  
 
- var x = window.matchMedia("(max-width: 700px)")
- screenState(mqls) // Call listener function at run time
- x.addListener(screenState) // Attach listener function on state changes
+
+// ============================================
+// ResponsiveSetup()
+// continously call screenResonssive()
+// populate media query array
+// add listener to window size
+// ============================================
+function ResponsiveSetup(){
+    setInterval(()=>{
+        screenResonsive(w, h)
+    },1000)
+
+    mqls = [ 
+        window.matchMedia("(max-width: 860px)"),
+        window.matchMedia("(max-width: 600px)"),
+        window.matchMedia("(max-height: 200px)")
+    ]
+
+    var x = window.matchMedia("(max-width: 700px)")
+    screenState(mqls) // Call listener function at run time
+    x.addListener(screenState) // Attach listener function on state changes
+}
 
 
 
@@ -204,17 +197,6 @@ Engine.run(engine)
 
 
 
-// setTimeout(loader(),100)
-
-function loader(){
-    // document.getElementById("loader").removeClass('hide')
-    setTimeout(()=>{
-        document.getElementById("loader").classList.remove('hide')
-    },500)
-        
-}
-
-
 // ============================================
 // loader()
 // delay hides div
@@ -233,6 +215,7 @@ function loader(){
 // ============================================
 function main(){
     setTimeout(loader(),100)
+    ResponsiveSetup()
 }
 
 
