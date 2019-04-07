@@ -1,27 +1,26 @@
-// where is matter being deployed
+//============================================================================================================================
+//                                                            TEST.JS
+// matter.js 
+// responsive
+//============================================================================================================================
+// globals
 const sectionTag = document.querySelector("section.shapes")
 const w = window.innerWidth
 const h = window.innerHeight
 var mqls = []; // make media query array
 
-
-
 //==============================================================
-//screenResonsive(width, height)
-// updates height and width  variable 
+//screenResonsive(width, height)  updates height and width  variable 
 //==============================================================
 function screenResonsive(width, height) {
-    // console.log("responsive ")
     const h = window.innerHeight;
     const w = window.innerWidth;
 
     return Math.round(width/100 * window.innerWidth),Math.round(height/100 * window.innerHeight);
 }
 
-
 // ============================================
-// screenState()
-// add listener to all media queries screen size
+// screenState()  add listener to all media queries screen size
 // ============================================
 function screenState(x) {
     console.log("responsive ")
@@ -32,10 +31,8 @@ function screenState(x) {
 
  }
 
-
 // ============================================
-// mediaQResponse()
-// respond t0 media query matchs
+// mediaQResponse()  respond t0 media query matchs
 // ============================================
 function mediaQResponse(){
     if (mqls[0].matches){ // do something when width: 860px media query matches
@@ -47,13 +44,10 @@ function mediaQResponse(){
     if (mqls[2].matches){ // do something when height: 500px media query matches
         document.body.style.backgroundColor = "y#f2e6ff"
     }
-
 }  
 
-
 // ============================================
-// ResponsiveSetup()
-// continously call screenResonssive() | populate media query array | add listener to window size
+// ResponsiveSetup() continously call screenResonssive() | populate media query array | add listener to window size
 // ============================================
 function ResponsiveSetup(){
     setInterval(()=>{
@@ -71,12 +65,11 @@ function ResponsiveSetup(){
     x.addListener(screenState) // Attach listener function on state changes
 }
 
-
-
 // ============================================
 // myRenderer class()
 // constructor set variables render, engine
 // object method
+// mouse method
 // ============================================
 class myRenderer {
     constructor(){
@@ -84,27 +77,20 @@ class myRenderer {
                 'matter-wrap'
             );
 
-        // const Render = Matter.Render,
-        const Runner = Matter.Runner,
-        
-        Common = Matter.Common;
-        
+        const Runner = Matter.Runner, Common = Matter.Common;
         this.Composite = Matter.Composite,
         this.Render = Matter.Render;
         this.MouseConstraint = Matter.MouseConstraint;
-        this. Mouse = Matter.Mouse;
-
+        this.Mouse = Matter.Mouse;
         this.Engine = Matter.Engine;
         this.World = Matter.World;
         this.Composites = Matter.Composites;
         this.Bodies = Matter.Bodies;
         this.stack;
-
-        // create engine
-        this.engine = this.Engine.create();
+        this.engine = this.Engine.create();  // second engine
         this.world = this.engine.world; //second world???
 
-        this.render = this.Render.create({
+        this.render = this.Render.create({ 
             element: sectionTag,
             engine: this.engine,
             options: {
@@ -128,9 +114,8 @@ class myRenderer {
             let _bodies = this.Bodies;
             let _world = this.world;
             let World = this.World;
-
-            console.log(_world)
             let stack = this.stack
+
             // the falling objects are this stack
             stack = this.Composites.stack(-350, -20, 10, 2, 0, 0, function(x, y) { // this is spacing function (x,y, colomn, row, ?,?)
                 return _bodies.circle(x, y, 5, { 
@@ -149,8 +134,9 @@ class myRenderer {
                     });
             });
 
-        World.add(_world, stack);
+        World.add(_world, stack); // add falling objects to world
 
+        // add the three rectangles into world
         World.add(_world, [
             _bodies.rectangle(-260, 100, w-500, 100, { // first angled body
              isStatic: true, angle: Math.PI * .06,
@@ -193,9 +179,7 @@ class myRenderer {
         this.Render.lookAt(this.render, this.Composite.allBodies(this.world)); // fit the render viewport to the scene
     }
     
-
-      mouseCtrl(){
-        // add mouse control
+    mouseCtrl(){    // add mouse control
         var mouse = this.Mouse.create(this.render.canvas),
             mouseConstraint = this.MouseConstraint.create(this.engine, {
                 mouse: mouse,
@@ -208,22 +192,12 @@ class myRenderer {
             });
 
         this.World.add(this.world, mouseConstraint);
-
-        
         this.render.mouse = mouse; // keep the mouse in sync with rendering
-
-        
-        // this.Render.lookAt(this.render, this.Composite.allBodies(this.world)); 
     }
 }
     
-
-
-
-
 // ============================================
-// loader()
-// delay hides div
+// loader() delay hides div
 // ============================================
 function loader(){
     // document.getElementById("loader").removeClass('hide')
@@ -234,8 +208,7 @@ function loader(){
 }
 
 // ============================================
-// main()
-// sets up first calls
+// main()  sets up first calls
 // ============================================
 function main(){
     let rend = new myRenderer()
@@ -244,6 +217,5 @@ function main(){
     setTimeout(loader(),100)
     ResponsiveSetup()
 }
-
 
 main()
