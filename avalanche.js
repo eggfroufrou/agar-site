@@ -15,7 +15,7 @@ var mqls = []; // make media query array
 function screenResonsive(width, height) {
     const h = window.innerHeight;
     const w = window.innerWidth;
-
+    // console.log('resonsive size w, h',width, height)
     return Math.round(width/100 * window.innerWidth),Math.round(height/100 * window.innerHeight);
 }
 
@@ -101,9 +101,8 @@ class myRenderer {
             pixelRatio: window.devicePixelRatio
           }
         })
-
         this.Render.run(this.render);
-
+        console.log('render size', this.render)
         // create runner
         var runner = Runner.create();
         Runner.run(runner, this.engine);
@@ -194,6 +193,10 @@ class myRenderer {
         this.World.add(this.world, mouseConstraint);
         this.render.mouse = mouse; // keep the mouse in sync with rendering
     }
+
+    clear(){
+        this.Engine.clear(this.engine)
+    }
 }
     
 // ============================================
@@ -211,11 +214,18 @@ function loader(){
 // main()  sets up first calls
 // ============================================
 function main(){
+    ResponsiveSetup()
     let rend = new myRenderer()
     rend.objects()
     rend.mouseCtrl()
+    setInterval(()=>{
+        // rend.clear()
+          // new myRenderer()
+        // rend.objects()
+        // rend.mouseCtrl()
+    },3000)
     setTimeout(loader(),100)
-    ResponsiveSetup()
+    
 }
 
 main()

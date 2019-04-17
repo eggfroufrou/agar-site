@@ -1,22 +1,12 @@
 body {
 	font-family: Arial;
 	font-size: 16px;
-	line-height: 1.5;
+	line-height: 1.5; 
+  margin:0px;
 	
 	background-color: white;
 	color: #333333;
 }
-
-/*section.split {
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 50%;
-  height: 100%;
-  background-color: white;
-  mix-blend-mode: difference;
-  pointer-events: none;
-}*/
 
 #content{
   position: relative;
@@ -29,9 +19,6 @@ body {
   height:100vh;
   width:100vh;
   background-color: #fff;
-
-
- /* background-color: #fff;*/
 }
 
 .hide{
@@ -67,12 +54,67 @@ canvas {
 }
 
 #footer p {
-  /*text-align: center;*/
-  /*bottom:0px;*/
   padding-left:1vw;
   margin-bottom: 0%;
-   font-size: 7.5vw;
-  /*margin-right:5%;*/
-  /*padding-right:5%;*/
+  font-size: 7.5vw;
 }
 
+@media only screen and (max-width: 420px) {
+ #footer p {
+    padding-left:5vw;
+    position:absolute;
+    bottom:5%;
+    width:100vw;
+    margin-bottom: 5%;
+    font-size: 6.5vw;
+  }
+
+  #content{
+  height:100vh;
+  width:100vw;
+  top:0px;
+  bottom:0px;
+  position:absolute;
+}
+
+}
+
+@media only screen and (max-width: 380px) {
+ #footer p {
+    padding-left:5vw;
+    position:absolute;
+    bottom:5%;
+    width:100vw;
+    margin-bottom: 20%;
+    font-size: 5.8vw;
+  }
+
+/*  #content{
+  height:100vh;
+  width:100vw;
+  top:0px;
+  bottom:0px;
+  position:absolute;
+}*/
+
+}
+
+@media only screen and (max-width: 330px) {
+ #footer p {
+    padding-left:5vw;
+    position:absolute;
+    bottom:5%;
+    width:100vw;
+    margin-bottom: 20%;
+    font-size: 5.8vw;
+  }
+
+/*  #content{
+  height:100vh;
+  width:100vw;
+  top:0px;
+  bottom:0px;
+  position:absolute;
+}*/
+
+}
