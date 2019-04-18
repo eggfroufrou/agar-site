@@ -34,9 +34,43 @@ function navScroll(){
   	nav.scrollLeft = draw;
 }
 
+function splashScroll(){
+	console.log('splashScroll')
+	var clientHeight = document.getElementById("splasher").clientHeight;
+	var splash = document.getElementById("splasher");
+	var nav = document.getElementById("head");
+	var logo = document.querySelector('.splashLogo')
+	window.onscroll = function(section) {
+		 if (window.scrollY >= (clientHeight/4)) {
+	 		splash.classList.add("splasher-disappear")
+	 		nav.classList.remove("no-display")
+	 		console.log(logo)
+	 		logo.classList.add("splashLogoTransition")
+	 		logo.classList.remove("splashLogo");
+
+	    } else {
+	    	console.log('not past 300 pixels');
+	    	splash.classList.remove("splasher-disappear")
+	    	nav.classList.add("no-display")
+	    	logo.classList.remove("splashLogoTransition")
+	    	logo.classList.add("splashLogo");
+	    }
+	}
+
+}
+
+function topFunction() {
+  document.body.scrollTop = 0; // For Safari
+  document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+}
+
 function main(){
 	window.addEventListener("scroll", navScroll);
-	scrollspy()
+	// scrollspy()
+	splashScroll();
+
+
+
 }
 
 main()
